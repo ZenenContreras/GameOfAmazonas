@@ -11,8 +11,8 @@ export const GameInfo = ({
   timeLeft,
 }) => {
   return (
-    <div className="bg-white rounded-xl shadow-xl overflow-hidden">
-      <div className="bg-gradient-to-r from-amber-700 to-amber-900 p-6 text-white">
+    <div className="bg-white rounded-xl shadow-xl overflow-hidden mt-6">
+      <div className="bg-gradient-to-r from-amber-700 to-amber-900 p-6  text-white">
         <div className="text-2xl font-bold text-center">
           {gameOver ? (
             <div className="text-red-300 flex items-center justify-center gap-2">
