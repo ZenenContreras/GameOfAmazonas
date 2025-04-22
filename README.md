@@ -44,9 +44,8 @@ El Juego de las Amazonas es una implementación digital del juego de mesa estrat
 - React 18.3
 - Vite 5.4
 - Tailwind CSS 3.4
-- TypeScript/JavaScript
+- JavaScript
 - Lucide React (para iconos)
-- PropTypes (validación de tipos)
 
 ## Instalación
 
