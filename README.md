@@ -112,10 +112,6 @@ GameOfAmazonas/
 - Ajustar [`src/utils/gameLogic.js`](src/utils/gameLogic.js) para cambiar las reglas del juego
 - Modificar [`src/components/Square.jsx`](src/components/Square.jsx) para cambiar la apariencia de las piezas
 
-## Licencia
-
-MIT
-
 ---
 
 Desarrollado con ❤️ utilizando React y Tailwind CSS.
