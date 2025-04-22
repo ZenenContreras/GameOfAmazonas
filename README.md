@@ -51,7 +51,7 @@ El Juego de las Amazonas es una implementación digital del juego de mesa estrat
 
 1. Clona el repositorio:
 ```bash
-git clone https://github.com/tuusuario/GameOfAmazonas.git
+git clone https://github.com/ZenenContreras/GameOfAmazonas.git
 cd GameOfAmazonas
 ```
 
