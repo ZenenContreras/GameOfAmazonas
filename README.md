@@ -81,7 +81,7 @@ GameOfAmazonas/
 │   │   └── gameLogic.js      # Lógica del juego
 │   ├── App.jsx               # Componente principal
 │   ├── index.css             # Estilos globales
-│   └── main.tsx              # Punto de entrada
+│   └── main.jsx              # Punto de entrada
 ├── public/                   # Archivos estáticos
 └── package.json              # Dependencias y scripts
 ```
