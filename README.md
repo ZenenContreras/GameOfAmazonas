@@ -1,5 +1,7 @@
 # Juego de las Amazonas
 
+![image](https://github.com/user-attachments/assets/b38e3b8b-23ac-49ef-93dc-62e6ca1d53df)
+
 ## Descripción General
 
 El Juego de las Amazonas es una implementación digital del juego de mesa estratégico donde los jugadores mueven piezas "amazonas" y disparan flechas para controlar el territorio del tablero. Esta versión está desarrollada con React, TypeScript y Tailwind CSS.
