@@ -1,6 +1,6 @@
 # 🏹 Juego de las Amazonas - Jugador Sintético
 
-![image](https://github.com/user-attachments/assets/b38e3b8b-23ac-49ef-93dc-62e6ca1d53df)
+<img width="1440" alt="Screenshot 2025-06-03 at 8 18 49 PM" src="https://github.com/user-attachments/assets/321c7c00-30f3-4418-b60e-1ac9f579d564" />
 
 ## 📋 Análisis del Problema
 
