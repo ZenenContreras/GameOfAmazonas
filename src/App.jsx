@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Board } from './components/Board';
 import { GameInfo } from './components/GameInfo';
+import { AISettings } from './components/AISettings';
 import { createInitialBoard, getValidMoves, hasValidMoves } from './utils/gameLogic';
+import { useAIPlayer } from './hooks/useAIPlayer';
+import { AI_CONFIG } from './utils/aiPlayer';
 
 const GamePhase = {
   SELECT_PIECE: 'SELECT_PIECE',
@@ -20,6 +23,33 @@ function App() {
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
   const [lastMove, setLastMove] = useState(null);
 
+  // Hook para el jugador IA
+  const {
+    isAIThinking,
+    aiDifficulty,
+    isAIEnabled,
+    setAIDifficulty,
+    setIsAIEnabled,
+    executeAIMove,
+    cancelAIMove,
+    isAITurn,
+    getDifficultyName
+  } = useAIPlayer();
+
+  // Efecto para ejecutar movimiento de IA
+  useEffect(() => {
+    if (!gameOver && isAITurn(currentPlayer) && gamePhase === GamePhase.SELECT_PIECE) {
+      executeAIMove(board, handleAIMove);
+    }
+  }, [currentPlayer, gamePhase, gameOver, isAITurn, executeAIMove, board]);
+
+  // Cleanup al desmontar componente
+  useEffect(() => {
+    return () => {
+      cancelAIMove();
+    };
+  }, [cancelAIMove]);
+
   useEffect(() => {
     if (!gameOver && timeLeft > 0) {
       const timer = setInterval(() => {
@@ -35,8 +65,48 @@ function App() {
     }
   }, [gameOver, timeLeft]);
 
+  /**
+   * Maneja el movimiento completo de la IA
+   */
+  const handleAIMove = (aiMove) => {
+    if (!aiMove || gameOver) return;
+
+    const { from, to, arrow } = aiMove;
+    
+    // Aplicar movimiento completo de la IA
+    const newBoard = [...board.map(row => [...row])];
+    newBoard[from[0]][from[1]] = 0; // Quitar pieza de posición original
+    newBoard[to[0]][to[1]] = currentPlayer; // Mover pieza a nueva posición
+    newBoard[arrow[0]][arrow[1]] = 3; // Disparar flecha
+    
+    setBoard(newBoard);
+    
+    // Actualizar historial
+    setMoveHistory([
+      ...moveHistory,
+      {
+        player: currentPlayer,
+        from: from,
+        to: to,
+        arrow: arrow,
+      },
+    ]);
+
+    // Cambiar turno
+    const nextPlayer = currentPlayer === 1 ? 2 : 1;
+    if (!hasValidMoves(newBoard, nextPlayer)) {
+      setGameOver(true);
+    } else {
+      setCurrentPlayer(nextPlayer);
+      setGamePhase(GamePhase.SELECT_PIECE);
+      setSelectedPiece(null);
+      setValidMoves([]);
+      setLastMove(null);
+    }
+  };
+
   const handleSquareClick = (row, col) => {
-    if (gameOver) return;
+    if (gameOver || isAITurn(currentPlayer) || isAIThinking) return;
 
     if (gamePhase === GamePhase.SELECT_PIECE) {
       if (board[row][col] === currentPlayer) {
@@ -90,6 +160,7 @@ function App() {
   };
 
   const handleRestart = () => {
+    cancelAIMove(); // Cancelar cualquier movimiento de IA en progreso
     setBoard(createInitialBoard());
     setCurrentPlayer(1);
     setSelectedPiece(null);
@@ -99,6 +170,20 @@ function App() {
     setGameOver(false);
     setTimeLeft(300);
     setLastMove(null);
+  };
+
+  const handleToggleAI = () => {
+    if (isAIThinking) {
+      cancelAIMove();
+    }
+    setIsAIEnabled(!isAIEnabled);
+    
+    // Si se activa la IA y es su turno, ejecutar movimiento
+    if (!isAIEnabled && currentPlayer === AI_CONFIG.PLAYER_AI && !gameOver) {
+      setTimeout(() => {
+        executeAIMove(board, handleAIMove);
+      }, 500);
+    }
   };
 
   return (
@@ -116,13 +201,23 @@ function App() {
               onSquareClick={handleSquareClick}
             />
           </div>
-          <div>
+          <div className="space-y-6">
+            <AISettings
+              isAIEnabled={isAIEnabled}
+              aiDifficulty={aiDifficulty}
+              isAIThinking={isAIThinking}
+              onToggleAI={handleToggleAI}
+              onDifficultyChange={setAIDifficulty}
+              getDifficultyName={getDifficultyName}
+            />
             <GameInfo
               currentPlayer={currentPlayer}
               moveHistory={moveHistory}
               gameOver={gameOver}
               onRestart={handleRestart}
               timeLeft={timeLeft}
+              isAIEnabled={isAIEnabled}
+              isAIThinking={isAIThinking}
             />
           </div>
         </div>
